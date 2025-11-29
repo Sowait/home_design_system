@@ -1,0 +1,189 @@
+
+import React, { useState, useEffect } from 'react';
+import { Card, List, Avatar, Button, Tag, Tabs, Empty, message } from 'antd';
+import { HeartOutlined, EyeOutlined, UserOutlined, FileTextOutlined } from '@ant-design/icons';
+import { userAPI } from '../../utils/api';
+import UserCaseImage from '../../components/UserCaseImage';
+import './Favorites.css';
+
+
+const { TabPane } = Tabs;
+
+const Favorites = () => {
+  const [favorites, setFavorites] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [activeTab, setActiveTab] = useState('all');
+
+  // 获取收藏列表
+ const fetchFavorites = async () => {
+  setLoading(true);
+  try {
+    const params = {
+      page: 1,
+      size: 100
+    };
+    const response = await userAPI.getMyFavorites(params);
+    console.log('收藏API返回:', response);
+    // 修改这里：
+    setFavorites(response.records || []);
+  } catch (error) {
+    message.error('获取收藏列表失败');
+  } finally {
+    setLoading(false);
+  }
+};
+
+  useEffect(() => {
+    fetchFavorites();
+  }, []);
+
+  // 过滤收藏数据
+  const getFilteredFavorites = (type) => {
+    if (type === 'all') return favorites;
+    return favorites.filter(item => item.type === type);
+  };
+
+  // 渲染收藏项
+  const renderFavoriteItem = (item) => {
+    const handleItemClick = () => {
+      if (item.type === 'case') {
+        window.location.href = `/cases/${item.targetId}`;
+      } else if (item.type === 'designer') {
+        window.location.href = `/designers/${item.targetId}`;
+      } else if (item.type === 'article') {
+        window.location.href = `/articles/${item.targetId}`;
+      }
+    };
+
+    const getIcon = () => {
+      switch (item.type) {
+        case 'case': return <EyeOutlined />;
+        case 'designer': return <UserOutlined />;
+        case 'article': return <FileTextOutlined />;
+        default: return <HeartOutlined />;
+      }
+    };
+
+    const getTypeLabel = () => {
+      switch (item.type) {
+        case 'case': return '案例';
+        case 'designer': return '设计师';
+        case 'article': return '文章';
+        default: return '未知';
+      }
+    };
+
+    const getTypeColor = () => {
+      switch (item.type) {
+        case 'case': return 'blue';
+        case 'designer': return 'green';
+        case 'article': return 'orange';
+        default: return 'default';
+      }
+    };
+
+    return (
+      <List.Item
+        key={item.id}
+        className="favorite-item"
+        onClick={handleItemClick}
+      >
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <div style={{ 
+            width: '120px', 
+            height: '80px', 
+            marginRight: '16px',
+            borderRadius: '6px',
+            overflow: 'hidden',
+            flexShrink: 0
+          }}>
+            <UserCaseImage coverImage={item.coverImage} title={item.title} />
+          </div>
+          <div style={{ flex: 1 }}>
+            <div className="favorite-title">
+              <span className="title-text">{item.title}</span>
+              <Tag color={getTypeColor()}>{getTypeLabel()}</Tag>
+            </div>
+            <div className="favorite-description">
+              {item.designerName && (
+                <p className="designer-name">{item.designerName}</p>
+              )}
+            </div>
+          </div>
+        </div>
+      </List.Item>
+    );
+  };
+
+  return (
+    <div className="favorites-page">
+      <div className="favorites-header">
+        <h2>我的收藏</h2>
+        <p>您收藏的案例、设计师和文章</p>
+      </div>
+
+      <Card>
+        <Tabs activeKey={activeTab} onChange={setActiveTab}>
+          <TabPane tab={`全部 (${favorites.length})`} key="all">
+            <List
+              className="favorites-list"
+              loading={loading}
+              dataSource={getFilteredFavorites('all')}
+              renderItem={renderFavoriteItem}
+              locale={{
+                emptyText: <Empty description="暂无收藏内容" />
+              }}
+            />
+          </TabPane>
+
+          <TabPane 
+            tab={`案例 (${getFilteredFavorites('case').length})`} 
+            key="case"
+          >
+            <List
+              className="favorites-list"
+              loading={loading}
+              dataSource={getFilteredFavorites('case')}
+              renderItem={renderFavoriteItem}
+              locale={{
+                emptyText: <Empty description="暂无收藏的案例" />
+              }}
+            />
+          </TabPane>
+
+          <TabPane 
+            tab={`设计师 (${getFilteredFavorites('designer').length})`} 
+            key="designer"
+          >
+            <List
+              className="favorites-list"
+              loading={loading}
+              dataSource={getFilteredFavorites('designer')}
+              renderItem={renderFavoriteItem}
+              locale={{
+                emptyText: <Empty description="暂无收藏的设计师" />
+              }}
+            />
+          </TabPane>
+
+          <TabPane 
+            tab={`文章 (${getFilteredFavorites('article').length})`} 
+            key="article"
+          >
+            <List
+              className="favorites-list"
+              loading={loading}
+              dataSource={getFilteredFavorites('article')}
+              renderItem={renderFavoriteItem}
+              locale={{
+                emptyText: <Empty description="暂无收藏的文章" />
+              }}
+            />
+          </TabPane>
+        </Tabs>
+      </Card>
+    </div>
+  );
+};
+
+export default Favorites;

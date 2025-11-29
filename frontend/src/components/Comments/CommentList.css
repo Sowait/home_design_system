@@ -1,0 +1,232 @@
+.comment-list {
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.comment-form {
+  margin-bottom: 20px;
+}
+
+.form-actions {
+  margin-top: 10px;
+  text-align: right;
+}
+
+.comment-item {
+  margin-bottom: 16px;
+}
+
+.comment-item .ant-comment-actions {
+  margin-left: 0;
+}
+
+.reply-to {
+  background: #f5f5f5;
+  padding: 8px 12px;
+  border-radius: 4px;
+  margin-top: 8px;
+  font-size: 12px;
+  color: #666;
+}
+
+.reply-user {
+  color: #1890ff;
+  font-weight: 500;
+}
+
+.child-comments {
+  margin-left: 40px;
+  padding-left: 16px;
+  border-left: 2px solid #f0f0f0;
+  margin-top: 16px;
+}
+
+.reply-form {
+  margin-top: 16px;
+  padding: 12px;
+  background: #fafafa;
+  border-radius: 6px;
+  border: 1px solid #e8e8e8;
+}
+
+.reply-actions {
+  margin-top: 8px;
+  text-align: right;
+}
+
+.edit-comment {
+  padding: 12px;
+  background: #fff7e6;
+  border-radius: 6px;
+  border: 1px solid #ffd591;
+}
+
+.edit-actions {
+  margin-top: 8px;
+  text-align: right;
+}
+
+/* 交互效果 */
+.comment-item .ant-comment-actions > li {
+  margin-right: 16px;
+}
+
+.comment-item .ant-comment-actions > li > span {
+  transition: all 0.3s;
+  display: inline-flex;
+  align-items: center;
+}
+
+.comment-item .ant-comment-actions > li > span:hover {
+  color: #1890ff;
+  transform: scale(1.05);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .comment-list {
+    padding: 0 12px;
+  }
+  
+  .child-comments {
+    margin-left: 20px;
+    padding-left: 8px;
+  }
+  
+  .reply-form,
+  .edit-comment {
+    padding: 8px;
+  }
+  
+  .comment-item .ant-comment-actions > li {
+    margin-right: 12px;
+  }
+}
+
+/* 加载状态 */
+.comment-list .ant-list-loading {
+  min-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 空状态 */
+.comment-list .ant-empty {
+  margin: 40px 0;
+}
+
+/* 分页样式 */
+.comment-list .ant-pagination {
+  text-align: center;
+  margin-top: 20px;
+}
+
+/* 动画效果 */
+.comment-item {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 高亮效果 */
+.comment-item:hover {
+  background: #fafafa;
+  border-radius: 6px;
+  padding: 12px;
+  margin: -12px;
+  margin-bottom: 4px;
+  transition: all 0.3s;
+}
+
+/* 点赞动画 */
+.comment-item .ant-comment-actions .like-animation {
+  animation: likeHeart 0.3s ease-in-out;
+}
+
+@keyframes likeHeart {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+/* 回复区域样式 */
+.child-comments .comment-item {
+  background: #fafafa;
+  padding: 12px;
+  border-radius: 6px;
+  margin-bottom: 8px;
+  border: 1px solid #f0f0f0;
+}
+
+.child-comments .comment-item:hover {
+  background: #f0f0f0;
+  border-color: #e8e8e8;
+}
+
+/* 工具提示样式 */
+.ant-tooltip {
+  font-size: 12px;
+}
+
+/* 确认对话框样式 */
+.ant-popconfirm {
+  font-size: 14px;
+}
+
+.ant-popconfirm-buttons {
+  text-align: right;
+}
+
+/* 文本域样式 */
+.ant-input {
+  border-radius: 6px;
+  transition: all 0.3s;
+}
+
+.ant-input:focus {
+  border-color: #1890ff;
+  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+}
+
+/* 按钮样式 */
+.ant-btn-primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+}
+
+.ant-btn-primary:hover {
+  background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+}
+
+/* 头像样式 */
+.ant-avatar {
+  border: 2px solid #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* 时间样式 */
+.comment-item .ant-comment-content-author time {
+  font-size: 12px;
+  color: #999;
+}
+
+/* 分隔线样式 */
+.ant-divider {
+  margin: 20px 0;
+  font-weight: 500;
+  color: #666;
+}
+
+.ant-divider-inner-text {
+  font-size: 14px;
+}

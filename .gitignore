@@ -1,0 +1,14 @@
+node_modules/
+frontend/node_modules/
+backend/target/
+frontend/build/
+dist/
+.DS_Store
+scripts/*.jar
+scripts/*.tar
+scripts/*.gz
+*.log
+.env
+.vscode/
+.idea/
+*.iml
