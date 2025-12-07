@@ -39,9 +39,13 @@ const MainLayout = () => {
         const user = JSON.parse(storedUserInfo);
         setUserInfo(user);
         
-        // 设计师登录后自动跳转到设计师控制台
-        if (user.role === 'DESIGNER' && location.pathname === '/') {
-          setTimeout(() => navigate('/designer-dashboard'), 100);
+        // 根据用户角色自动跳转到对应的控制台
+        if (location.pathname === '/') {
+          if (user.role === 'ADMIN') {
+            setTimeout(() => navigate('/admin'), 100);
+          } else if (user.role === 'DESIGNER') {
+            setTimeout(() => navigate('/designer-dashboard'), 100);
+          }
         }
       } catch (error) {
         console.error('解析localStorage用户信息失败:', error);
@@ -122,6 +126,21 @@ const MainLayout = () => {
       ];
     }
 
+    if (userInfo.role === 'ADMIN') {
+      return [
+        {
+          key: '/admin',
+          icon: <SettingOutlined />,
+          label: '管理员控制台',
+        },
+        {
+          key: '/admin/users',
+          icon: <UserOutlined />,
+          label: '用户管理',
+        },
+      ];
+    }
+
     if (userInfo.role === 'DESIGNER') {
       return [
         {
@@ -180,7 +199,7 @@ const MainLayout = () => {
         label: '装修文章',
       },
       {
-        key: '/appointments',
+        key: '/my-appointments',
         icon: <CalendarOutlined />,
         label: '我的预约',
       },

@@ -7,12 +7,10 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.homedesign.entity.Comment;
 import com.homedesign.entity.User;
 import com.homedesign.entity.Case;
-import com.homedesign.entity.Designer;
 import com.homedesign.mapper.CommentMapper;
 import com.homedesign.service.CommentService;
 import com.homedesign.service.UserService;
 import com.homedesign.service.CaseService;
-import com.homedesign.service.DesignerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.homedesign.dto.CommentDTO;
@@ -28,9 +26,6 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     
     @Autowired
     private CaseService caseService;
-    
-    @Autowired
-    private DesignerService designerService;
 
     @Override
     public Comment createComment(Comment comment) {
@@ -220,18 +215,36 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     }
 
     @Override
-    public IPage<CommentDTO> getDesignerCaseComments(Long designerId, Integer page, Integer size) {
-        // 检查designerId是否为null
-        if (designerId == null) {
+    public IPage<CommentDTO> getDesignerCaseComments(Long userId, Integer page, Integer size) {
+        // 检查userId是否为null
+        if (userId == null) {
+            // 如果userId为null，返回空结果
             Page<CommentDTO> emptyPage = new Page<>(page, size);
             emptyPage.setRecords(new ArrayList<>());
             emptyPage.setTotal(0);
             return emptyPage;
         }
         
+        // 根据用户ID查找对应的设计师记录 - 先获取设计师信息，再获取案例
+        QueryWrapper<Case> designerQueryWrapper = new QueryWrapper<>();
+        designerQueryWrapper.eq("designer_id", userId)
+                       .select("id", "title")
+                       .last("LIMIT 1");
+        Case designerCase = caseService.getOne(designerQueryWrapper);
+        
+        if (designerCase == null) {
+            // 如果该用户不是设计师，返回空结果
+            Page<CommentDTO> emptyPage = new Page<>(page, size);
+            emptyPage.setRecords(new ArrayList<>());
+            emptyPage.setTotal(0);
+            return emptyPage;
+        }
+        
+        Long actualDesignerId = designerCase.getDesignerId();
+        
         // 查询该设计师的所有案例
         QueryWrapper<Case> caseQueryWrapper = new QueryWrapper<>();
-        caseQueryWrapper.eq("designer_id", designerId)
+        caseQueryWrapper.eq("designer_id", actualDesignerId)
                        .select("id", "title");
         List<Case> designerCases = caseService.list(caseQueryWrapper);
         
@@ -243,7 +256,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
             return emptyPage;
         }
         
-        // 获取案例ID列表和标题映射
+        // 获取案例ID列表
         List<Long> caseIds = new ArrayList<>();
         Map<Long, String> caseTitleMap = new HashMap<>();
         for (Case caseEntity : designerCases) {

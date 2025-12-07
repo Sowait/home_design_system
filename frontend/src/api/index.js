@@ -3,294 +3,303 @@ import request from './request';
 // 用户相关API
 export const userApi = {
   // 用户登录
-  login: (data) => request.post('/api/auth/login', data),
+  login: (data) => request.post('/auth/login', data),
   
   // 用户注册
-  register: (data) => request.post('/api/auth/register', data),
+  register: (data) => request.post('/auth/register', data),
   
   // 获取用户信息
-  getUserInfo: () => request.get('/api/auth/me'),
+  getUserInfo: () => request.get('/auth/me'),
   
   // 更新用户信息
-  updateUserInfo: (data) => request.put('/api/user/profile', data),
+  updateUserInfo: (data) => request.put('/user/profile', data),
   
   // 上传头像
-  uploadAvatar: (data) => request.post('/api/user/avatar', data),
+  uploadAvatar: (data) => request.post('/user/avatar', data),
   
   // 获取收藏列表
-  getFavorites: (params) => request.get('/api/user/favorites', { params }),
+  getFavorites: (params) => request.get('/user/favorites', { params }),
   
   // 获取评论列表
-  getComments: (params) => request.get('/api/user/comments', { params }),
+  getComments: (params) => request.get('/user/comments', { params }),
   
   // 添加收藏
-  addFavorite: (data) => request.post('/api/user/favorite', data),
+  addFavorite: (data) => request.post('/user/favorite', data),
   
   // 取消收藏
-  removeFavorite: (id) => request.delete(`/api/user/favorite/${id}`),
+  removeFavorite: (id) => request.delete(`/user/favorite/${id}`),
   
   // 获取用户统计
-  getUserStats: () => request.get('/api/user/stats'),
+  getUserStats: () => request.get('/user/stats'),
 };
 
 // 设计案例相关API
 export const caseApi = {
   // 获取案例列表
-  getCases: (params) => request.get('/api/cases', { params }),
+  getCases: (params) => request.get('/cases', { params }),
   
   // 获取案例详情
-  getCaseDetail: (id) => request.get(`/api/cases/${id}`),
+  getCaseDetail: (id) => request.get(`/cases/${id}`),
   
   // 点赞案例
-  likeCase: (id) => request.post(`/api/cases/${id}/like`),
+  likeCase: (id) => request.post(`/cases/${id}/like`),
   
   // 获取我的案例
-  getMyCases: (params) => request.get('/api/cases/my', { params }),
+  getMyCases: (params) => request.get('/cases/my', { params }),
   
   // 创建案例
-  createCase: (data) => request.post('/api/cases', data),
+  createCase: (data) => request.post('/cases', data),
   
   // 更新案例
-  updateCase: (id, data) => request.put(`/api/cases/${id}`, data),
+  updateCase: (id, data) => request.put(`/cases/${id}`, data),
   
   // 删除案例
-  deleteCase: (id) => request.delete(`/api/cases/${id}`),
+  deleteCase: (id) => request.delete(`/cases/${id}`),
   
   // 发布案例
-  publishCase: (id) => request.put(`/api/cases/${id}/publish`),
+  publishCase: (id) => request.put(`/cases/${id}/publish`),
 };
 
 // 设计师相关API
 export const designerApi = {
   // 获取设计师列表
-  getDesigners: (params) => request.get('/api/designers', { params }),
+  getDesigners: (params) => request.get('/designers', { params }),
   
   // 获取设计师详情
-  getDesignerDetail: (id) => request.get(`/api/designers/${id}`),
+  getDesignerDetail: (id) => request.get(`/designers/${id}`),
   
   // 点赞设计师
-  likeDesigner: (id) => request.post(`/api/designers/${id}/like`),
+  likeDesigner: (id) => request.post(`/designers/${id}/like`),
   
   // 获取我的设计师信息
-  getMyDesigners: () => request.get('/api/designers/my'),
+  getMyDesigners: () => request.get('/designers/my'),
   
   // 更新设计师信息
-  updateDesignerProfile: (data) => request.put('/api/designers/profile', data),
+  updateDesignerProfile: (data) => request.put('/designers/profile', data),
   
   // 获取热门设计师
-  getTopDesigners: (params) => request.get('/api/designers/top', { params }),
+  getTopDesigners: (params) => request.get('/designers/top', { params }),
 };
 
 // 文章相关API
 export const articleApi = {
   // 获取文章列表
-  getArticles: (params) => request.get('/api/articles', { params }),
+  getArticles: (params) => request.get('/articles', { params }),
   
   // 获取文章详情
-  getArticleDetail: (id) => request.get(`/api/articles/${id}`),
+  getArticleDetail: (id) => request.get(`/articles/${id}`),
   
   // 点赞文章
-  likeArticle: (id) => request.post(`/api/articles/${id}/like`),
+  likeArticle: (id) => request.post(`/articles/${id}/like`),
   
   // 创建文章
-  createArticle: (data) => request.post('/api/articles', data),
+  createArticle: (data) => request.post('/articles', data),
   
   // 更新文章
-  updateArticle: (id, data) => request.put(`/api/articles/${id}`, data),
+  updateArticle: (id, data) => request.put(`/articles/${id}`, data),
   
   // 删除文章
-  deleteArticle: (id) => request.delete(`/api/articles/${id}`),
+  deleteArticle: (id) => request.delete(`/articles/${id}`),
   
   // 发布文章
-  publishArticle: (id) => request.put(`/api/articles/${id}/publish`),
+  publishArticle: (id) => request.put(`/articles/${id}/publish`),
   
   // 获取文章分类
-  getCategories: () => request.get('/api/articles/categories'),
+  getCategories: () => request.get('/articles/categories'),
   
   // 获取热门文章
-  getHotArticles: (params) => request.get('/api/articles/hot', { params }),
+  getHotArticles: (params) => request.get('/articles/hot', { params }),
 };
 
 // 预约相关API
 export const appointmentApi = {
   // 创建预约
-  createAppointment: (data) => request.post('/api/appointments', data),
+  createAppointment: (data) => request.post('/appointments', data),
   
   // 获取我的预约
-  getMyAppointments: (params) => request.get('/api/appointments/my', { params }),
+  getMyAppointments: (params) => request.get('/appointments/my', { params }),
   
   // 获取设计师预约
-  getDesignerAppointments: (params) => request.get('/api/appointments/designer', { params }),
+  getDesignerAppointments: (params) => request.get('/appointments/designer', { params }),
   
   // 获取预约详情
-  getAppointmentDetail: (id) => request.get(`/api/appointments/${id}`),
+  getAppointmentDetail: (id) => request.get(`/appointments/${id}`),
   
   // 取消预约
-  cancelAppointment: (id, data) => request.put(`/api/appointments/${id}/cancel`, data),
+  cancelAppointment: (id, data) => request.put(`/appointments/${id}/cancel`, data),
   
   // 确认预约
-  confirmAppointment: (id, data) => request.put(`/api/appointments/${id}/confirm`, data),
+  confirmAppointment: (id, data) => request.put(`/appointments/${id}/confirm`, data),
   
   // 拒绝预约
-  rejectAppointment: (id, data) => request.put(`/api/appointments/${id}/reject`, data),
+  rejectAppointment: (id, data) => request.put(`/appointments/${id}/reject`, data),
   
   // 完成预约
-  completeAppointment: (id, data) => request.put(`/api/appointments/${id}/complete`, data),
+  completeAppointment: (id, data) => request.put(`/appointments/${id}/complete`, data),
   
   // 获取预约历史记录
-  getAppointmentHistory: (id) => request.get(`/api/appointments/${id}/history`),
+  getAppointmentHistory: (id) => request.get(`/appointments/${id}/history`),
   
   // 获取预约统计
-  getAppointmentStats: () => request.get('/api/appointments/stats'),
+  getAppointmentStats: () => request.get('/appointments/stats'),
   
   // 批量更新预约状态
-  batchUpdateStatus: (data) => request.put('/api/appointments/batch-update', data),
+  batchUpdateStatus: (data) => request.put('/appointments/batch-update', data),
   
   // 获取所有预约（管理员）
-  getAllAppointments: (params) => request.get('/api/appointments/admin', { params }),
+  getAllAppointments: (params) => request.get('/appointments/admin', { params }),
 };
 
 // 管理员相关API
 export const adminApi = {
   // 获取仪表板统计
-  getDashboardStats: () => request.get('/api/admin/dashboard/stats'),
+  getDashboardStats: () => request.get('/admin/dashboard/stats'),
   
   // 获取用户列表
-  getUserList: (params) => request.get('/api/admin/users', { params }),
+  getUserList: (params) => request.get('/admin/users', { params }),
   
   // 删除用户
-  deleteUser: (id) => request.delete(`/api/admin/users/${id}`),
+  deleteUser: (id) => request.delete(`/admin/users/${id}`),
+  
+  // 更新用户
+  updateUser: (id, data) => request.put(`/admin/users/${id}`, data),
+  
+  // 获取设计师信息
+  getDesignerByUserId: (userId) => request.get(`/admin/designers/user/${userId}`),
+  
+  // 更新设计师信息
+  updateDesignerByUserId: (userId, data) => request.put(`/admin/designers/user/${userId}`, data),
   
   // 获取案例列表
-  getCaseList: (params) => request.get('/api/admin/cases', { params }),
+  getCaseList: (params) => request.get('/admin/cases', { params }),
   
   // 审核案例
-  reviewCase: (id, status) => request.put(`/api/admin/cases/${id}/review`, null, { params: { status } }),
+  reviewCase: (id, status) => request.put(`/admin/cases/${id}/review`, null, { params: { status } }),
   
   // 获取文章列表
-  getArticleList: (params) => request.get('/api/admin/articles', { params }),
+  getArticleList: (params) => request.get('/admin/articles', { params }),
   
   // 审核文章
-  reviewArticle: (id, status) => request.put(`/api/admin/articles/${id}/review`, null, { params: { status } }),
+  reviewArticle: (id, status) => request.put(`/admin/articles/${id}/review`, null, { params: { status } }),
   
   // 获取预约列表
-  getAppointmentList: (params) => request.get('/api/admin/appointments', { params }),
+  getAppointmentList: (params) => request.get('/admin/appointments', { params }),
   
   // 处理预约
-  handleAppointment: (id, status) => request.put(`/api/admin/appointments/${id}/handle`, null, { params: { status } }),
+  handleAppointment: (id, status) => request.put(`/admin/appointments/${id}/handle`, null, { params: { status } }),
 };
 
 // 审核相关API
 export const reviewApi = {
   // 案例审核
-  getPendingCases: (params) => request.get('/api/admin/review/cases/pending', { params }),
-  reviewCase: (caseId, data) => request.post(`/api/admin/review/cases/${caseId}/review`, data),
-  getCaseReviewHistory: (caseId) => request.get(`/api/admin/review/cases/${caseId}/history`),
-  batchReviewCases: (data) => request.post('/api/admin/review/cases/batch-review', data),
-  submitCaseForReview: (caseId) => request.post(`/api/admin/review/cases/${caseId}/submit`),
-  autoReviewCase: (caseId) => request.post(`/api/admin/review/cases/${caseId}/auto-review`),
+  getPendingCases: (params) => request.get('/admin/review/cases/pending', { params }),
+  reviewCase: (caseId, data) => request.post(`/admin/review/cases/${caseId}/review`, data),
+  getCaseReviewHistory: (caseId) => request.get(`/admin/review/cases/${caseId}/history`),
+  batchReviewCases: (data) => request.post('/admin/review/cases/batch-review', data),
+  submitCaseForReview: (caseId) => request.post(`/admin/review/cases/${caseId}/submit`),
+  autoReviewCase: (caseId) => request.post(`/admin/review/cases/${caseId}/auto-review`),
   
   // 文章审核
-  getPendingArticles: (params) => request.get('/api/admin/review/articles/pending', { params }),
-  reviewArticle: (articleId, data) => request.post(`/api/admin/review/articles/${articleId}/review`, data),
-  getArticleReviewHistory: (articleId) => request.get(`/api/admin/review/articles/${articleId}/history`),
-  batchReviewArticles: (data) => request.post('/api/admin/review/articles/batch-review', data),
-  submitArticleForReview: (articleId) => request.post(`/api/admin/review/articles/${articleId}/submit`),
-  autoReviewArticle: (articleId) => request.post(`/api/admin/review/articles/${articleId}/auto-review`),
+  getPendingArticles: (params) => request.get('/admin/review/articles/pending', { params }),
+  reviewArticle: (articleId, data) => request.post(`/admin/review/articles/${articleId}/review`, data),
+  getArticleReviewHistory: (articleId) => request.get(`/admin/review/articles/${articleId}/history`),
+  batchReviewArticles: (data) => request.post('/admin/review/articles/batch-review', data),
+  submitArticleForReview: (articleId) => request.post(`/admin/review/articles/${articleId}/submit`),
+  autoReviewArticle: (articleId) => request.post(`/admin/review/articles/${articleId}/auto-review`),
   
   // 审核统计
-  getReviewStats: () => request.get('/api/admin/review/stats'),
-  getReviewerStats: () => request.get('/api/admin/review/reviewer-stats'),
+  getReviewStats: () => request.get('/admin/review/stats'),
+  getReviewerStats: () => request.get('/admin/review/reviewer-stats'),
   
   // 通知测试
-  testNotification: (data) => request.post('/api/admin/review/test-notification', data),
+  testNotification: (data) => request.post('/admin/review/test-notification', data),
 };
 
 // 设计师控制台相关API
 export const designerDashboardApi = {
   // 获取统计信息
-  getStats: () => request.get('/api/designer/dashboard/stats'),
+  getStats: () => request.get('/designer/dashboard/stats'),
   
   // 获取我的案例
-  getMyCases: (params) => request.get('/api/designer/dashboard/cases', { params }),
+  getMyCases: (params) => request.get('/designer/dashboard/cases', { params }),
   
   // 创建案例
-  createCase: (data) => request.post('/api/designer/dashboard/cases', data),
+  createCase: (data) => request.post('/designer/dashboard/cases', data),
   
   // 更新案例
-  updateCase: (id, data) => request.put(`/api/designer/dashboard/cases/${id}`, data),
+  updateCase: (id, data) => request.put(`/designer/dashboard/cases/${id}`, data),
   
   // 删除案例
-  deleteCase: (id) => request.delete(`/api/designer/dashboard/cases/${id}`),
+  deleteCase: (id) => request.delete(`/designer/dashboard/cases/${id}`),
   
   // 发布案例
-  publishCase: (id) => request.put(`/api/designer/dashboard/cases/${id}/publish`),
+  publishCase: (id) => request.put(`/designer/dashboard/cases/${id}/publish`),
   
   // 获取我的预约
-  getMyAppointments: (params) => request.get('/api/designer/dashboard/appointments', { params }),
+  getMyAppointments: (params) => request.get('/designer/dashboard/appointments', { params }),
   
   // 处理预约
-  handleAppointment: (id, params) => request.put(`/api/designer/dashboard/appointments/${id}/handle`, null, { params }),
+  handleAppointment: (id, params) => request.put(`/designer/dashboard/appointments/${id}/handle`, null, { params }),
 };
 
 // 评论相关API
 export const commentApi = {
   // 获取评论列表
-  getComments: (params) => request.get('/api/comments', { params }),
+  getComments: (params) => request.get('/comments', { params }),
   
   // 获取评论树（支持多级评论）
-  getCommentTree: (params) => request.get('/api/comments/tree', { params }),
+  getCommentTree: (params) => request.get('/comments/tree', { params }),
   
   // 创建评论（支持回复）
-  createComment: (data) => request.post('/api/comments/create', data),
+  createComment: (data) => request.post('/comments/create', data),
   
   // 回复评论
-  replyComment: (parentId, data) => request.post(`/api/comments/reply/${parentId}`, data),
+  replyComment: (parentId, data) => request.post(`/comments/reply/${parentId}`, data),
   
   // 更新评论
-  updateComment: (id, data) => request.put(`/api/comments/${id}/update`, data),
+  updateComment: (id, data) => request.put(`/comments/${id}/update`, data),
   
   // 删除评论
-  deleteComment: (id) => request.delete(`/api/comments/${id}/delete`),
+  deleteComment: (id) => request.delete(`/comments/${id}/delete`),
   
   // 点赞评论
-  likeComment: (id) => request.post(`/api/comments/${id}/like`),
+  likeComment: (id) => request.post(`/comments/${id}/like`),
   
   // 获取子评论
-  getChildComments: (parentId) => request.get(`/api/comments/${parentId}/replies`),
+  getChildComments: (parentId) => request.get(`/comments/${parentId}/replies`),
   
   // 获取案例评论
-  getCaseComments: (caseId, params) => request.get(`/api/comments/case/${caseId}`, { params }),
+  getCaseComments: (caseId, params) => request.get(`/comments/case/${caseId}`, { params }),
   
   // 获取文章评论
-  getArticleComments: (articleId, params) => request.get(`/api/comments/article/${articleId}`, { params }),
+  getArticleComments: (articleId, params) => request.get(`/comments/article/${articleId}`, { params }),
   
   // 获取用户评论列表
-  getUserComments: (userId, params) => request.get(`/api/comments/user/${userId}`, { params }),
+  getUserComments: (userId, params) => request.get(`/comments/user/${userId}`, { params }),
 };
 
 // 收藏相关API
 export const favoriteApi = {
   // 获取我的收藏
-  getMyFavorites: (params) => request.get('/api/favorites', { params }),
+  getMyFavorites: (params) => request.get('/favorites', { params }),
   
   // 添加收藏
-  addFavorite: (data) => request.post('/api/favorites/add', data),
+  addFavorite: (data) => request.post('/favorites/add', data),
   
   // 取消收藏
-  removeFavorite: (id) => request.delete(`/api/favorites/${id}`),
+  removeFavorite: (id) => request.delete(`/favorites/${id}`),
   
   // 检查是否收藏
-  checkFavorite: (params) => request.get('/api/favorites/check', { params }),
+  checkFavorite: (params) => request.get('/favorites/check', { params }),
   
   // 获取收藏的案例
-  getFavoriteCases: (params) => request.get('/api/favorites/cases', { params }),
+  getFavoriteCases: (params) => request.get('/favorites/cases', { params }),
   
   // 获取收藏的设计师
-  getFavoriteDesigners: (params) => request.get('/api/favorites/designers', { params }),
+  getFavoriteDesigners: (params) => request.get('/favorites/designers', { params }),
   
   // 获取收藏的文章
-  getFavoriteArticles: (params) => request.get('/api/favorites/articles', { params }),
+  getFavoriteArticles: (params) => request.get('/favorites/articles', { params }),
 };
 
 // 搜索相关API
@@ -311,54 +320,54 @@ export const searchApi = {
   getSearchSuggestions: (keyword) => request.get('/search/suggestions', { params: { keyword } }),
 };
 
-// 通知相关API
+  // 通知相关API
 export const notificationApi = {
   // 获取通知列表
-  getNotifications: (params) => request.get('/api/notifications', { params }),
+  getNotifications: (params) => request.get('/notifications', { params }),
   
   // 获取未读通知数量
-  getUnreadCount: () => request.get('/api/notifications/unread-count'),
+  getUnreadCount: () => request.get('/notifications/unread-count'),
   
   // 标记通知为已读
-  markAsRead: (id) => request.put(`/api/notifications/${id}/read`),
+  markAsRead: (id) => request.put(`/notifications/${id}/read`),
   
   // 标记所有通知为已读
-  markAllAsRead: () => request.put('/api/notifications/read-all'),
+  markAllAsRead: () => request.put('/notifications/read-all'),
   
   // 删除通知
-  deleteNotification: (id) => request.delete(`/api/notifications/${id}`),
+  deleteNotification: (id) => request.delete(`/notifications/${id}`),
   
   // 批量删除通知
-  batchDeleteNotifications: (ids) => request.delete('/api/notifications/batch', { data: ids }),
+  batchDeleteNotifications: (ids) => request.delete('/notifications/batch', { data: ids }),
   
   // 获取通知详情
-  getNotificationById: (id) => request.get(`/api/notifications/${id}`),
+  getNotificationById: (id) => request.get(`/notifications/${id}`),
   
   // 搜索通知
-  searchNotifications: (params) => request.get('/api/notifications/search', { params }),
+  searchNotifications: (params) => request.get('/notifications/search', { params }),
   
   // 获取通知统计
-  getNotificationStats: () => request.get('/api/notifications/stats'),
+  getNotificationStats: () => request.get('/notifications/stats'),
   
   // 获取通知设置
-  getNotificationSettings: () => request.get('/api/notifications/settings'),
+  getNotificationSettings: () => request.get('/notifications/settings'),
   
   // 更新通知设置
-  updateNotificationSettings: (settings) => request.put('/api/notifications/settings', settings),
+  updateNotificationSettings: (settings) => request.put('/notifications/settings', settings),
   
   // 管理员功能
-  sendGlobalNotification: (data) => request.post('/api/notifications/admin/global', data),
-  sendNotificationToUsers: (data) => request.post('/api/notifications/admin/users', data),
-  cleanupExpiredNotifications: (days) => request.delete('/api/notifications/admin/cleanup', { params: { days } }),
-  getAdminNotificationStats: () => request.get('/api/notifications/admin/stats'),
+  sendGlobalNotification: (data) => request.post('/notifications/admin/global', data),
+  sendNotificationToUsers: (data) => request.post('/notifications/admin/users', data),
+  cleanupExpiredNotifications: (days) => request.delete('/notifications/admin/cleanup', { params: { days } }),
+  getAdminNotificationStats: () => request.get('/notifications/admin/stats'),
   
   // 便捷通知接口
-  sendAppointmentNotification: (data) => request.post('/api/notifications/appointment', data),
-  sendCommentNotification: (data) => request.post('/api/notifications/comment', data),
-  sendFavoriteNotification: (data) => request.post('/api/notifications/favorite', data),
-  sendSystemNotification: (data) => request.post('/api/notifications/system', data),
-  sendReviewNotification: (data) => request.post('/api/notifications/review', data),
-  sendLikeNotification: (data) => request.post('/api/notifications/like', data),
+  sendAppointmentNotification: (data) => request.post('/notifications/appointment', data),
+  sendCommentNotification: (data) => request.post('/notifications/comment', data),
+  sendFavoriteNotification: (data) => request.post('/notifications/favorite', data),
+  sendSystemNotification: (data) => request.post('/notifications/system', data),
+  sendReviewNotification: (data) => request.post('/notifications/review', data),
+  sendLikeNotification: (data) => request.post('/notifications/like', data),
 };
 
 export default {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import { Layout } from 'antd';
 import MainLayout from './components/Layout/MainLayout';
 import Home from './pages/Home';
@@ -9,21 +9,23 @@ import DesignCases from './pages/DesignCases/DesignCases';
 import CaseDetail from './pages/DesignCases/CaseDetail';
 import Designers from './pages/Designers/Designers';
 import DesignerDetail from './pages/Designers/DesignerDetail';
+import DesignerCaseDetail from './pages/Designer/DesignerCaseDetail';
 import Articles from './pages/Articles/Articles';
 import ArticleDetail from './pages/Articles/ArticleDetail';
 import Appointment from './pages/Appointment/Appointment';
 import UserProfile from './pages/User/UserProfile';
-import AdminDashboard from './pages/Admin/AdminDashboard';
-import DesignerDashboard from './pages/Designer/DesignerDashboard';
-import DesignerCaseDetail from './pages/Designer/DesignerCaseDetail';
-import CaseManagement from './pages/Designer/CaseManagement';
-import ArticleManagement from './pages/Designer/ArticleManagement';
-import AppointmentManagement from './pages/Designer/AppointmentManagement';
-import CommentManagement from './pages/Designer/CommentManagement';
-import ProfileManagement from './pages/Designer/ProfileManagement';
+import Comments from './pages/Comments/MyComments';
 import Favorites from './pages/User/Favorites';
-import MyAppointments from './pages/Appointment/MyAppointments';
-import MyComments from './pages/Comments/MyComments';
+import MyAppointments from './pages/Appointment/MyAppointments_fixed';
+import AdminDashboard from './pages/Admin/AdminDashboard';
+import UserManagement from './pages/Admin/UserManagement';
+import CaseManagement from './pages/Admin/CaseManagement';
+import DesignerDashboard from './pages/Designer/DesignerDashboard';
+import DesignerCaseManagement from './pages/Designer/CaseManagement';
+import DesignerArticleManagement from './pages/Designer/ArticleManagement';
+import DesignerAppointmentManagement from './pages/Designer/AppointmentManagement';
+import DesignerProfileManagement from './pages/Designer/ProfileManagement';
+import DesignerCommentManagement from './pages/Designer/CommentManagement';
 import ProtectedRoute from './components/Auth/ProtectedRoute';
 
 const { Content } = Layout;
@@ -55,77 +57,25 @@ function App() {
           
           {/* 需要登录的子路由 */}
           <Route path="appointment" element={<Appointment />} />
+          <Route path="my-appointments" element={<MyAppointments />} />
+          <Route path="comments" element={<Comments />} />
           <Route path="favorites" element={<Favorites />} />
-          <Route path="appointments" element={<MyAppointments />} />
-          <Route path="comments" element={<MyComments />} />
           <Route path="profile" element={<UserProfile />} />
           
-          {/* 管理员路由 */}
-          <Route element={<ProtectedRoute roles={["ADMIN"]} />}>
-            <Route path="admin" element={<AdminDashboard />} />
-          </Route>
+          {/* 设计师路由 */}
+          <Route path="designer-dashboard" element={<DesignerDashboard />} />
+          <Route path="designer/cases" element={<DesignerCaseManagement />} />
+          <Route path="designer/cases/:id" element={<DesignerCaseDetail />} />
+          <Route path="designer/appointments" element={<DesignerAppointmentManagement />} />
+          <Route path="designer/articles" element={<DesignerArticleManagement />} />
+          <Route path="designer/comments" element={<DesignerCommentManagement />} />
+          <Route path="designer/profile" element={<DesignerProfileManagement />} />
           
-          {/* 设计师专用路由 */}
-          <Route 
-            path="designer-dashboard" 
-            element={
-              <ProtectedRoute roles={["DESIGNER", "ADMIN"]}>
-                <DesignerDashboard />
-              </ProtectedRoute>
-            } 
-          />
-          <Route 
-            path="designer/cases" 
-            element={
-              <ProtectedRoute roles={["DESIGNER", "ADMIN"]}>
-                <CaseManagement />
-              </ProtectedRoute>
-            } 
-          />
-          <Route 
-            path="designer/cases/:id" 
-            element={
-              <ProtectedRoute roles={["DESIGNER", "ADMIN"]}>
-                <DesignerCaseDetail />
-              </ProtectedRoute>
-            } 
-          />
-          <Route 
-            path="designer/appointments" 
-            element={
-              <ProtectedRoute roles={["DESIGNER", "ADMIN"]}>
-                <AppointmentManagement />
-              </ProtectedRoute>
-            } 
-          />
-          <Route 
-            path="designer/articles" 
-            element={
-              <ProtectedRoute roles={["DESIGNER", "ADMIN"]}>
-                <ArticleManagement />
-              </ProtectedRoute>
-            } 
-          />
-          <Route 
-            path="designer/comments" 
-            element={
-              <ProtectedRoute roles={["DESIGNER", "ADMIN"]}>
-                <CommentManagement />
-              </ProtectedRoute>
-            } 
-          />
-          <Route 
-            path="designer/profile" 
-            element={
-              <ProtectedRoute roles={["DESIGNER", "ADMIN"]}>
-                <ProfileManagement />
-              </ProtectedRoute>
-            } 
-          />
+          {/* 管理员路由 */}
+          <Route path="admin" element={<AdminDashboard />} />
+          <Route path="admin/users" element={<UserManagement />} />
+          <Route path="admin/cases" element={<CaseManagement />} />
         </Route>
-        
-        {/* 重定向未匹配的路由 */}
-        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </div>
   );

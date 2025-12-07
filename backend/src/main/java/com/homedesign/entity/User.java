@@ -49,7 +49,6 @@ public class User implements UserDetails {
     @TableField("role")
     private String role;
 
-    
     @TableField("register_time")
     private LocalDateTime registerTime;
     @TableField("create_time")

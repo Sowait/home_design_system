@@ -4,20 +4,20 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.homedesign.common.Result;
-import com.homedesign.entity.Case;
-import com.homedesign.entity.Article;
-import com.homedesign.entity.Appointment;
 import com.homedesign.entity.User;
-import com.homedesign.service.CaseService;
-import com.homedesign.service.ArticleService;
-import com.homedesign.service.AppointmentService;
+import com.homedesign.entity.Designer;
 import com.homedesign.service.UserService;
+import com.homedesign.service.AdminService;
+import com.homedesign.service.DesignerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * 管理员控制器
+ * 负责用户管理和系统统计功能
+ */
 @RestController
 @RequestMapping("/api/admin")
 @CrossOrigin(origins = "*")
@@ -27,39 +27,87 @@ public class AdminController {
     private UserService userService;
 
     @Autowired
-    private CaseService caseService;
+    private AdminService adminService;
 
     @Autowired
-    private ArticleService articleService;
+    private DesignerService designerService;
 
-    @Autowired
-    private AppointmentService appointmentService;
-
+    /**
+     * 获取系统统计数据
+     */
     @GetMapping("/dashboard/stats")
     public Result<Map<String, Object>> getDashboardStats() {
-        Map<String, Object> stats = new HashMap<>();
-        
-        // 统计数据
-        stats.put("totalUsers", userService.count());
-        stats.put("totalCases", caseService.count());
-        stats.put("totalArticles", articleService.count());
-        stats.put("totalAppointments", appointmentService.count());
-        
+        Map<String, Object> stats = adminService.getSystemStats();
         return Result.success(stats);
     }
 
+    /**
+     * 获取用户列表
+     */
     @GetMapping("/users")
     public Result<IPage<User>> getUserList(
             @RequestParam(defaultValue = "1") Integer page,
             @RequestParam(defaultValue = "10") Integer size,
-            @RequestParam(required = false) String keyword) {
+            @RequestParam(required = false) String keyword,
+            @RequestParam(required = false) String role) {
         
-        Page<User> pageInfo = new Page<>(page, size);
-        return Result.success(userService.getUserList(pageInfo, keyword));
+        IPage<User> result = adminService.getUserList(page, size, keyword, role);
+        return Result.success(result);
     }
 
+    /**
+     * 根据ID获取用户详情
+     */
+    @GetMapping("/users/{id}")
+    public Result<User> getUserById(@PathVariable Long id) {
+        User user = userService.getById(id);
+        if (user == null) {
+            return Result.error("用户不存在");
+        }
+        return Result.success(user);
+    }
+
+    /**
+     * 更新用户信息
+     */
+    @PutMapping("/users/{id}")
+    public Result<String> updateUser(@PathVariable Long id, @RequestBody User user) {
+        // 获取原用户信息
+        User existingUser = userService.getById(id);
+        if (existingUser == null) {
+            return Result.error("用户不存在");
+        }
+        
+        // 设置更新字段
+        user.setId(id);
+        
+        // 密码为空时不更新密码
+        if (user.getPassword() == null || user.getPassword().trim().isEmpty()) {
+            user.setPassword(existingUser.getPassword());
+        }
+        
+        boolean success = userService.updateById(user);
+        if (success) {
+            return Result.success("用户更新成功");
+        } else {
+            return Result.error("用户更新失败");
+        }
+    }
+
+    /**
+     * 删除用户
+     */
     @DeleteMapping("/users/{id}")
     public Result<String> deleteUser(@PathVariable Long id) {
+        // 检查用户是否存在
+        User user = userService.getById(id);
+        if (user == null) {
+            return Result.error("用户不存在");
+        }
+        
+        // 防止删除管理员自己
+        // TODO: 添加当前用户权限检查
+        
         boolean success = userService.removeById(id);
         if (success) {
             return Result.success("用户删除成功");
@@ -68,93 +116,122 @@ public class AdminController {
         }
     }
 
-    @GetMapping("/cases")
-    public Result<IPage<Case>> getCaseList(
-            @RequestParam(defaultValue = "1") Integer page,
-            @RequestParam(defaultValue = "10") Integer size) {
-        
-        Page<Case> pageInfo = new Page<>(page, size);
-        QueryWrapper<Case> queryWrapper = new QueryWrapper<>();
-        queryWrapper.orderByDesc("create_time");
-        
-        IPage<Case> result = caseService.page(pageInfo, queryWrapper);
-        return Result.success(result);
-    }
-
-    @PutMapping("/cases/{id}/review")
-    public Result<String> reviewCase(@PathVariable Long id, @RequestParam String status) {
-        Case designCase = caseService.getById(id);
-        if (designCase == null) {
-            return Result.error("案例不存在");
+    /**
+     * 批量删除用户
+     */
+    @DeleteMapping("/users/batch")
+    public Result<String> batchDeleteUsers(@RequestBody java.util.List<Long> ids) {
+        if (ids == null || ids.isEmpty()) {
+            return Result.error("请选择要删除的用户");
         }
         
-        designCase.setStatus(status);
-        boolean success = caseService.updateById(designCase);
-        
+        boolean success = userService.removeBatchByIds(ids);
         if (success) {
-            return Result.success("审核操作成功");
+            return Result.success("批量删除成功");
         } else {
-            return Result.error("审核操作失败");
+            return Result.error("批量删除失败");
         }
     }
 
-    @GetMapping("/articles")
-    public Result<IPage<Article>> getArticleList(
-            @RequestParam(defaultValue = "1") Integer page,
-            @RequestParam(defaultValue = "10") Integer size) {
-        
-        Page<Article> pageInfo = new Page<>(page, size);
-        QueryWrapper<Article> queryWrapper = new QueryWrapper<>();
-        queryWrapper.orderByDesc("create_time");
-        
-        IPage<Article> result = articleService.page(pageInfo, queryWrapper);
-        return Result.success(result);
-    }
-
-    @PutMapping("/articles/{id}/review")
-    public Result<String> reviewArticle(@PathVariable Long id, @RequestParam String status) {
-        Article article = articleService.getById(id);
-        if (article == null) {
-            return Result.error("文章不存在");
+    /**
+     * 重置用户密码
+     */
+    @PutMapping("/users/{id}/reset-password")
+    public Result<String> resetPassword(@PathVariable Long id) {
+        User user = userService.getById(id);
+        if (user == null) {
+            return Result.error("用户不存在");
         }
         
-        article.setStatus(status);
-        boolean success = articleService.updateById(article);
+        // 重置为默认密码或生成随机密码
+        String newPassword = "123456"; // TODO: 生成随机密码
         
+        user.setPassword(newPassword);
+        
+        boolean success = userService.updateById(user);
         if (success) {
-            return Result.success("审核操作成功");
+            return Result.success("密码重置成功，新密码：" + newPassword);
         } else {
-            return Result.error("审核操作失败");
+            return Result.error("密码重置失败");
         }
     }
 
-    @GetMapping("/appointments")
-    public Result<IPage<Appointment>> getAppointmentList(
-            @RequestParam(defaultValue = "1") Integer page,
-            @RequestParam(defaultValue = "10") Integer size) {
+    /**
+     * 获取用户统计信息
+     */
+    @GetMapping("/users/stats")
+    public Result<Map<String, Object>> getUserStats() {
+        Map<String, Object> stats = new java.util.HashMap<>();
         
-        Page<Appointment> pageInfo = new Page<>(page, size);
-        QueryWrapper<Appointment> queryWrapper = new QueryWrapper<>();
-        queryWrapper.orderByDesc("create_time");
+        // 用户总数
+        long totalUsers = userService.count();
+        stats.put("totalUsers", totalUsers);
         
-        IPage<Appointment> result = appointmentService.page(pageInfo, queryWrapper);
-        return Result.success(result);
+        // 各角色用户数量
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        
+        queryWrapper.eq("role", "USER");
+        long userCount = userService.count(queryWrapper);
+        stats.put("userCount", userCount);
+        
+        queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("role", "DESIGNER");
+        long designerCount = userService.count(queryWrapper);
+        stats.put("designerCount", designerCount);
+        
+        queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("role", "ADMIN");
+        long adminCount = userService.count(queryWrapper);
+        stats.put("adminCount", adminCount);
+        
+        // 今日注册用户数
+        queryWrapper = new QueryWrapper<>();
+        queryWrapper.ge("create_time", java.time.LocalDateTime.now().toLocalDate().atStartOfDay());
+        long todayUsers = userService.count(queryWrapper);
+        stats.put("todayUsers", todayUsers);
+        
+        return Result.success(stats);
     }
 
-    @PutMapping("/appointments/{id}/handle")
-    public Result<String> handleAppointment(@PathVariable Long id, @RequestParam String status) {
-        Appointment appointment = appointmentService.getById(id);
-        if (appointment == null) {
-            return Result.error("预约不存在");
+    /**
+     * 根据用户ID获取设计师信息
+     */
+    @GetMapping("/designers/user/{userId}")
+    public Result<Designer> getDesignerByUserId(@PathVariable Long userId) {
+        QueryWrapper<Designer> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("user_id", userId);
+        Designer designer = designerService.getOne(queryWrapper);
+        
+        if (designer == null) {
+            return Result.error("设计师信息不存在");
         }
         
-        appointment.setStatus(status);
-        boolean success = appointmentService.updateById(appointment);
+        return Result.success(designer);
+    }
+
+    /**
+     * 根据用户ID更新设计师信息
+     */
+    @PutMapping("/designers/user/{userId}")
+    public Result<String> updateDesignerByUserId(@PathVariable Long userId, @RequestBody Designer designer) {
+        // 先查找该用户对应的设计师记录
+        QueryWrapper<Designer> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("user_id", userId);
+        Designer existingDesigner = designerService.getOne(queryWrapper);
         
+        if (existingDesigner == null) {
+            return Result.error("设计师信息不存在");
+        }
+        
+        // 更新设计师信息
+        designer.setId(existingDesigner.getId());
+        designer.setUserId(userId);
+        
+        boolean success = designerService.updateById(designer);
         if (success) {
-            return Result.success("操作成功");
+            return Result.success("设计师信息更新成功");
         } else {
-            return Result.error("操作失败");
+            return Result.error("设计师信息更新失败");
         }
     }
 }

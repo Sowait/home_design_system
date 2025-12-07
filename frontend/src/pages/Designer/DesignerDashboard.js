@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Card, Row, Col, Statistic, List, Avatar, Tag, Button, message } from 'antd';
-import { 
-  FileOutlined, 
-  UserOutlined, 
-  CalendarOutlined, 
-  EyeOutlined, 
+import {
+  FileOutlined,
+  UserOutlined,
+  CalendarOutlined,
+  EyeOutlined,
   StarOutlined,
   FormOutlined,
   PlusOutlined

@@ -5,176 +5,172 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.homedesign.entity.User;
 import com.homedesign.entity.Case;
-import com.homedesign.entity.Designer;
-import com.homedesign.entity.Article;
-import com.homedesign.entity.Appointment;
-import com.homedesign.entity.Notification;
 import com.homedesign.service.AdminService;
 import com.homedesign.service.UserService;
 import com.homedesign.service.CaseService;
-import com.homedesign.service.DesignerService;
-import com.homedesign.service.ArticleService;
-import com.homedesign.service.AppointmentService;
-import com.homedesign.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 管理员服务实现类
+ * 负责用户管理和系统统计功能
+ */
 @Service
 public class AdminServiceImpl implements AdminService {
 
     @Autowired
     private UserService userService;
-    
+
     @Autowired
     private CaseService caseService;
     
-    @Autowired
-    private DesignerService designerService;
-    
-    @Autowired
-    private ArticleService articleService;
-    
-    @Autowired
-    private AppointmentService appointmentService;
-    
-    @Autowired
-    private NotificationService notificationService;
 
     @Override
-    public IPage<User> getUserList(Integer page, Integer size, String keyword, String role, String status) {
+    public IPage<User> getUserList(Integer page, Integer size, String keyword, String role) {
         Page<User> pageInfo = new Page<>(page, size);
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         
+        // 关键词搜索（用户名、邮箱）
         if (keyword != null && !keyword.trim().isEmpty()) {
             queryWrapper.and(wrapper -> wrapper.like("username", keyword)
                                             .or()
                                             .like("email", keyword));
         }
         
+        // 角色筛选
         if (role != null && !role.trim().isEmpty()) {
             queryWrapper.eq("role", role);
-        }
-        
-        if (status != null && !status.trim().isEmpty()) {
-            queryWrapper.eq("status", status);
         }
         
         queryWrapper.orderByDesc("create_time");
         return userService.page(pageInfo, queryWrapper);
     }
 
-
-
     @Override
     public Map<String, Object> getSystemStats() {
         Map<String, Object> stats = new HashMap<>();
         
-        // 用户统计
-        stats.put("totalUsers", userService.count());
-        stats.put("activeUsers", userService.count(new QueryWrapper<User>().eq("status", "ACTIVE")));
+        // 用户总数
+        long totalUsers = userService.count();
+        stats.put("totalUsers", totalUsers);
         
-        // 设计师统计
-        stats.put("totalDesigners", designerService.count());
-        stats.put("verifiedDesigners", designerService.count(new QueryWrapper<Designer>().eq("verified", true)));
+        // 各角色用户数量
+        QueryWrapper<User> userQuery = new QueryWrapper<>();
+        userQuery.eq("role", "USER");
+        long userCount = userService.count(userQuery);
+        stats.put("userCount", userCount);
         
-        // 案例统计
-        stats.put("totalCases", caseService.count());
-        stats.put("publishedCases", caseService.count(new QueryWrapper<Case>().eq("status", "PUBLISHED")));
+        userQuery = new QueryWrapper<>();
+        userQuery.eq("role", "DESIGNER");
+        long designerCount = userService.count(userQuery);
+        stats.put("designerCount", designerCount);
         
-        // 文章统计
-        stats.put("totalArticles", articleService.count());
-        stats.put("publishedArticles", articleService.count(new QueryWrapper<Article>().eq("status", "PUBLISHED")));
+        userQuery = new QueryWrapper<>();
+        userQuery.eq("role", "ADMIN");
+        long adminCount = userService.count(userQuery);
+        stats.put("adminCount", adminCount);
         
-        // 预约统计
-        stats.put("totalAppointments", appointmentService.count());
-        stats.put("pendingAppointments", appointmentService.count(new QueryWrapper<Appointment>().eq("status", "PENDING")));
+        // 今日注册用户数
+        QueryWrapper<User> todayQuery = new QueryWrapper<>();
+        todayQuery.ge("create_time", LocalDateTime.now().toLocalDate().atStartOfDay());
+        long todayUsers = userService.count(todayQuery);
+        stats.put("todayUsers", todayUsers);
         
-        // 通知统计
-        // 暂时使用默认值，因为NotificationService没有count方法
-        stats.put("totalNotifications", 0);
-        stats.put("unreadNotifications", 0);
+        // 案例总数
+        long totalCases = caseService.count();
+        stats.put("totalCases", totalCases);
+        
+        return stats;
+    }
+
+
+
+    @Override
+    public boolean batchOperateUsers(List<Long> userIds, String operation) {
+        if (userIds == null || userIds.isEmpty()) {
+            return false;
+        }
+        
+        if ("delete".equals(operation)) {
+            return userService.removeBatchByIds(userIds);
+        }
+        
+        return false;
+    }
+
+    @Override
+    public Map<String, Object> getUserStats() {
+        Map<String, Object> stats = new HashMap<>();
+        
+        // 用户总数
+        long totalUsers = userService.count();
+        stats.put("totalUsers", totalUsers);
+        
+        // 各角色用户数量
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("role", "USER");
+        long userCount = userService.count(queryWrapper);
+        stats.put("userCount", userCount);
+        
+        queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("role", "DESIGNER");
+        long designerCount = userService.count(queryWrapper);
+        stats.put("designerCount", designerCount);
+        
+        queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("role", "ADMIN");
+        long adminCount = userService.count(queryWrapper);
+        stats.put("adminCount", adminCount);
+        
+        // 今日注册用户数
+        queryWrapper = new QueryWrapper<>();
+        queryWrapper.ge("create_time", LocalDateTime.now().toLocalDate().atStartOfDay());
+        long todayUsers = userService.count(queryWrapper);
+        stats.put("todayUsers", todayUsers);
+        
+        // 本月新增用户数
+        queryWrapper = new QueryWrapper<>();
+        queryWrapper.ge("create_time", LocalDateTime.now().minusDays(30));
+        long monthUsers = userService.count(queryWrapper);
+        stats.put("monthUsers", monthUsers);
         
         return stats;
     }
 
     @Override
-    public Map<String, Object> getSystemAnalytics() {
-        Map<String, Object> analytics = new HashMap<>();
-        
-        // 这里可以添加更复杂的分析逻辑
-        // 暂时返回基础统计
-        analytics.put("userGrowth", getUserGrowthStats());
-        analytics.put("contentStats", getContentStats());
-        analytics.put("activityStats", getActivityStats());
-        
-        return analytics;
+    public boolean isUsernameExists(String username, Long excludeId) {
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("username", username);
+        if (excludeId != null) {
+            queryWrapper.ne("id", excludeId);
+        }
+        return userService.count(queryWrapper) > 0;
     }
 
     @Override
-    public boolean batchUpdateContentStatus(String contentType, List<Long> ids, String status) {
-        switch (contentType.toUpperCase()) {
-            case "CASE":
-                return updateCasesStatus(ids, status);
-            case "ARTICLE":
-                return updateArticlesStatus(ids, status);
-            case "DESIGNER":
-                return updateDesignersStatus(ids, status);
-            default:
-                return false;
+    public boolean isEmailExists(String email, Long excludeId) {
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("email", email);
+        if (excludeId != null) {
+            queryWrapper.ne("id", excludeId);
         }
+        return userService.count(queryWrapper) > 0;
     }
 
-    // 私有辅助方法
-
-    private boolean updateCasesStatus(List<Long> ids, String status) {
-        List<Case> cases = caseService.listByIds(ids);
-        for (Case designCase : cases) {
-            designCase.setStatus(status);
+    /**
+     * 生成随机密码
+     */
+    private String generateRandomPassword() {
+        String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        StringBuilder password = new StringBuilder();
+        for (int i = 0; i < 8; i++) {
+            password.append(chars.charAt((int) (Math.random() * chars.length())));
         }
-        return caseService.updateBatchById(cases);
-    }
-
-    private boolean updateArticlesStatus(List<Long> ids, String status) {
-        List<Article> articles = articleService.listByIds(ids);
-        for (Article article : articles) {
-            article.setStatus(status);
-        }
-        return articleService.updateBatchById(articles);
-    }
-
-    private boolean updateDesignersStatus(List<Long> ids, String status) {
-        List<Designer> designers = designerService.listByIds(ids);
-        for (Designer designer : designers) {
-        }
-        return designerService.updateBatchById(designers);
-    }
-
-    private Map<String, Object> getUserGrowthStats() {
-        Map<String, Object> growth = new HashMap<>();
-        // 这里应该实现真实的用户增长统计
-        growth.put("newUsersThisMonth", 0);
-        growth.put("newUsersThisWeek", 0);
-        growth.put("newUsersToday", 0);
-        return growth;
-    }
-
-    private Map<String, Object> getContentStats() {
-        Map<String, Object> content = new HashMap<>();
-        content.put("totalViews", 0);
-        content.put("totalLikes", 0);
-        content.put("totalComments", 0);
-        return content;
-    }
-
-    private Map<String, Object> getActivityStats() {
-        Map<String, Object> activity = new HashMap<>();
-        activity.put("activeUsersToday", 0);
-        activity.put("newAppointmentsToday", 0);
-        activity.put("newCommentsToday", 0);
-        return activity;
+        return password.toString();
     }
 }

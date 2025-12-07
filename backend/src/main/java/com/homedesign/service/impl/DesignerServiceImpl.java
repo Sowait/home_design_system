@@ -67,8 +67,6 @@ public class DesignerServiceImpl extends ServiceImpl<DesignerMapper, Designer> i
     public Designer getMyDesignerInfo(Long userId) {
         QueryWrapper<Designer> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("user_id", userId);
-        queryWrapper.orderByDesc("create_time");
-        queryWrapper.last("LIMIT 1");
         return getOne(queryWrapper);
     }
 
