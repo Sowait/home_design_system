@@ -337,7 +337,7 @@ INSERT INTO system_config (config_key, config_value, description) VALUES
 ('sms_notification_enabled', 'false', '是否启用短信通知'),
 ('system_maintenance', 'false', '系统维护状态'),
 ('maintenance_message', '系统正在维护中，请稍后再试', '维护提示信息')
-ON DUPLICATE KEY UPDATE config_value = VALUES(config_value);
+ON DUPLICATE KEY UPDATE config_value = VALUES(config_value), description = VALUES(description);
 
 -- ========================================
 -- 插入更多测试用户数据
@@ -352,7 +352,7 @@ ON DUPLICATE KEY UPDATE username = username;
 
 -- 插入测试设计师
 INSERT INTO user (id,username, password, email, role) 
-VALUES (7，'designer1', '123456', 'designer1@example.com', 'DESIGNER')
+VALUES (7,'designer1', '123456', 'designer1@example.com', 'DESIGNER')
 ON DUPLICATE KEY UPDATE username = username;
 -- 插入更多设计师用户
 INSERT INTO user (id,username, password, email, phone, avatar, gender, birthday, location, role, register_time) VALUES
@@ -363,21 +363,21 @@ INSERT INTO user (id,username, password, email, phone, avatar, gender, birthday,
 ON DUPLICATE KEY UPDATE username = username;
 
 -- 插入设计师详细信息
-INSERT INTO designer (user_id, name, title, avatar, service_area, style, price, experience, completed_cases, likes, bio, education, awards, service_scope, rating, create_time, update_time) VALUES
-(7, '默认设计师', '首席设计师', '/avatars/designer1.jpg', '北京、天津、河北', '现代简约,北欧风格,新中式', '500-1000元/㎡', 15, 28, 156, '专注于现代简约和北欧风格设计，拥有丰富的家装设计经验，致力于为客户打造舒适、美观的居住空间。', '清华大学美术学院', '2022年中国室内设计大奖赛金奖', '住宅设计、商业空间设计、软装搭配', 4.8, '2023-01-20 10:00:00', '2024-01-20 10:00:00'),
-(8, '陈设计师', '首席设计师', '/avatars/designer1.jpg', '北京、天津、河北', '现代简约,北欧风格,新中式', '500-1000元/㎡', 15, 28, 156, '专注于现代简约和北欧风格设计，拥有丰富的家装设计经验，致力于为客户打造舒适、美观的居住空间。', '清华大学美术学院', '2022年中国室内设计大奖赛金奖', '住宅设计、商业空间设计、软装搭配', 4.8, '2023-01-20 10:00:00', '2024-01-20 10:00:00'),
-(9, '刘设计师', '高级设计师', '/avatars/designer2.jpg', '上海、苏州、杭州', '轻奢风格,现代简约,美式风格', '800-1500元/㎡', 12, 35, 234, '擅长轻奢和美式风格设计，注重空间的功能性和美观性的完美结合，为客户提供高品质的设计服务。', '同济大学建筑与城市规划学院', '2021年上海室内设计大赛一等奖', '高端住宅设计、别墅设计、样板间设计', 4.9, '2023-02-15 14:30:00', '2024-02-15 14:30:00'),
-(10, '王设计师', '资深设计师', '/avatars/designer3.jpg', '深圳、广州、东莞', '工业风,现代简约,地中海风格', '600-1200元/㎡', 18, 42, 189, '拥有18年设计经验，擅长工业风和地中海风格，设计理念前卫，善于运用创新的设计手法。', '中央美术学院', '2023年深圳室内设计年度设计师', '工业风装修、创意空间设计、商业设计', 4.7, '2023-03-01 09:00:00', '2024-03-01 09:00:00'),
-(11, '张设计师', '创意设计师', '/avatars/designer4.jpg', '广州、佛山、珠海', '新中式,古典中式,日式风格', '700-1300元/㎡', 10, 25, 145, '专注于新中式和日式风格设计，善于将传统文化元素与现代设计理念相结合，打造独特的设计风格。', '广州美术学院', '2022年新中式设计大赛银奖', '中式设计、禅意空间、茶室设计', 4.6, '2023-04-10 15:20:00', '2024-04-10 15:20:00');
+INSERT INTO designer (id, user_id, name, title, avatar, service_area, style, price, experience, completed_cases, likes, bio, education, awards, service_scope, rating, create_time, update_time) VALUES
+(7, 7, '默认设计师', '首席设计师', '/avatars/designer1.jpg', '北京、天津、河北', '现代简约,北欧风格,新中式', '500-1000元/㎡', 15, 28, 156, '专注于现代简约和北欧风格设计，拥有丰富的家装设计经验，致力于为客户打造舒适、美观的居住空间。', '清华大学美术学院', '2022年中国室内设计大奖赛金奖', '住宅设计、商业空间设计、软装搭配', 4.8, '2023-01-20 10:00:00', '2024-01-20 10:00:00'),
+(8, 8, '陈设计师', '首席设计师', '/avatars/designer1.jpg', '北京、天津、河北', '现代简约,北欧风格,新中式', '500-1000元/㎡', 15, 28, 156, '专注于现代简约和北欧风格设计，拥有丰富的家装设计经验，致力于为客户打造舒适、美观的居住空间。', '清华大学美术学院', '2022年中国室内设计大奖赛金奖', '住宅设计、商业空间设计、软装搭配', 4.8, '2023-01-20 10:00:00', '2024-01-20 10:00:00'),
+(9, 9, '刘设计师', '高级设计师', '/avatars/designer2.jpg', '上海、苏州、杭州', '轻奢风格,现代简约,美式风格', '800-1500元/㎡', 12, 35, 234, '擅长轻奢和美式风格设计，注重空间的功能性和美观性的完美结合，为客户提供高品质的设计服务。', '同济大学建筑与城市规划学院', '2021年上海室内设计大赛一等奖', '高端住宅设计、别墅设计、样板间设计', 4.9, '2023-02-15 14:30:00', '2024-02-15 14:30:00'),
+(10, 10, '王设计师', '资深设计师', '/avatars/designer3.jpg', '深圳、广州、东莞', '工业风,现代简约,地中海风格', '600-1200元/㎡', 18, 42, 189, '拥有18年设计经验，擅长工业风和地中海风格，设计理念前卫，善于运用创新的设计手法。', '中央美术学院', '2023年深圳室内设计年度设计师', '工业风装修、创意空间设计、商业设计', 4.7, '2023-03-01 09:00:00', '2024-03-01 09:00:00'),
+(11, 11, '张设计师', '创意设计师', '/avatars/designer4.jpg', '广州、佛山、珠海', '新中式,古典中式,日式风格', '700-1300元/㎡', 10, 25, 145, '专注于新中式和日式风格设计，善于将传统文化元素与现代设计理念相结合，打造独特的设计风格。', '广州美术学院', '2022年新中式设计大赛银奖', '中式设计、禅意空间、茶室设计', 4.6, '2023-04-10 15:20:00', '2024-04-10 15:20:00');
 
 -- 插入设计案例数据
 INSERT INTO design_case (title, style, layout, area, designer_id, designer_name, cover_image, images, design_concept, materials, views, likes, favorites, status, create_time, update_time) VALUES
-('现代简约三居室改造', '现代简约', '三居室', 120, 8, '陈设计师', '["https://b0.bdstatic.com/f4b80562d1f6f088f5165a82726452df.jpg@h_1280","https://oss.cloudhubei.com.cn/cms/release/set1/20250630/8240fca554f0a6a01a482cad303df918.tmp!styleprocess"]', '["/cases/case1_1.jpg","/cases/case1_2.jpg","/cases/case1_3.jpg"]', '以简洁明快的设计手法，打造舒适现代的生活空间。整体采用白色调为主，搭配木质元素，营造温馨舒适的家居氛围。', '实木地板、乳胶漆、定制衣柜、现代家具、LED照明', 1250, 89, 23, 'APPROVED', '2023-06-15 10:00:00', '2024-06-15 10:00:00'),
-('北欧风格温馨小窝', '北欧风格', '两居室', 85, 9, '刘设计师', '["https://b0.bdstatic.com/f4b80562d1f6f088f5165a82726452df.jpg@h_1280","https://oss.cloudhubei.com.cn/cms/release/set1/20250630/8240fca554f0a6a01a482cad303df918.tmp!styleprocess"]', '["/cases/case2_1.jpg","/cases/case2_2.jpg","/cases/case2_3.jpg"]', '运用北欧风格的设计理念，以白色和浅木色为主调，营造清新自然的生活空间。大量使用天然材质，注重采光和通风。', '橡木地板、白色乳胶漆、棉麻布艺、北欧家具、绿植装饰', 980, 145, 31, 'APPROVED', '2023-07-20 14:30:00', '2024-07-20 14:30:00'),
-('轻奢风格大平层', '轻奢风格', '四居室', 180, 9, '刘设计师', '["https://b0.bdstatic.com/f4b80562d1f6f088f5165a82726452df.jpg@h_1280","https://oss.cloudhubei.com.cn/cms/release/set1/20250630/8240fca554f0a6a01a482cad303df918.tmp!styleprocess"]', '["/cases/case3_1.jpg","/cases/case3_2.jpg","/cases/case3_3.jpg"]', '融合轻奢设计元素，采用高级灰色调和金属装饰，打造优雅奢华的居住环境。注重细节处理，体现品质和格调。', '大理石地板、金属装饰线、定制家具、水晶吊灯、高端布艺', 1580, 234, 45, 'APPROVED', '2023-08-10 09:15:00', '2024-08-10 09:15:00'),
-('工业风LOFT改造', '工业风', '复式', 150, 8, '王设计师', '["https://b0.bdstatic.com/f4b80562d1f6f088f5165a82726452df.jpg@h_1280","https://oss.cloudhubei.com.cn/cms/release/set1/20250630/8240fca554f0a6a01a482cad303df918.tmp!styleprocess"]', '["/cases/case4_1.jpg","/cases/case4_2.jpg","/cases/case4_3.jpg"]', '保留原始建筑结构，运用工业风设计元素，打造时尚前卫的居住空间。大量使用金属、混凝土等材质，展现原始粗犷的美感。', '水泥地面、金属管道、砖墙、工业风家具、轨道射灯', 1100, 167, 28, 'APPROVED', '2023-09-05 16:45:00', '2024-09-05 16:45:00'),
-('新中式别墅设计', '新中式', '别墅', 280, 8, '张设计师', '["https://b0.bdstatic.com/f4b80562d1f6f088f5165a82726452df.jpg@h_1280","https://oss.cloudhubei.com.cn/cms/release/set1/20250630/8240fca554f0a6a01a482cad303df918.tmp!styleprocess"]', '["/cases/case5_1.jpg","/cases/case5_2.jpg","/cases/case5_3.jpg"]', '将传统中式元素与现代设计理念完美融合，打造既有文化底蕴又符合现代生活的居住空间。注重空间层次和意境营造。', '红木家具、中式屏风、青砖地面、古典灯具、传统字画', 2100, 298, 56, 'APPROVED', '2023-10-12 11:30:00', '2024-10-12 11:30:00'),
-('地中海风格度假屋', '地中海风格', '三居室', 130, 8, '张设计师', '["https://b0.bdstatic.com/f4b80562d1f6f088f5165a82726452df.jpg@h_1280","https://oss.cloudhubei.com.cn/cms/release/set1/20250630/8240fca554f0a6a01a482cad303df918.tmp!styleprocess"]', '["/cases/case6_1.jpg","/cases/case6_2.jpg","/cases/case6_3.jpg"]', '运用地中海风格的蓝白色调，营造清新浪漫的海滨度假氛围。大量使用天然石材和木质元素，打造舒适宜人的居住环境。', '蓝色外墙、白色室内、陶土砖、藤编家具、海洋装饰', 1350, 178, 32, 'APPROVED', '2023-11-08 14:20:00', '2024-11-08 14:20:00');
+('现代简约三居室改造', '现代简约', '三居室', 120, 8, '陈设计师', '["https://qcloud.dpfile.com/pc/ABweRJIh6K8GDEmxBP9enB6AzP61l-8JzVQc6Sb4GcqetTJPCukyTGns-vo8-MYZ.jpg","https://img2.baidu.com/it/u=144191808,3946099891&fm=253&fmt=auto&app=138&f=JPEG?w=667&h=500"]', '["/cases/case1_1.jpg","/cases/case1_2.jpg","/cases/case1_3.jpg"]', '以简洁明快的设计手法，打造舒适现代的生活空间。整体采用白色调为主，搭配木质元素，营造温馨舒适的家居氛围。', '实木地板、乳胶漆、定制衣柜、现代家具、LED照明', 1250, 89, 23, 'APPROVED', '2023-06-15 10:00:00', '2024-06-15 10:00:00'),
+('北欧风格温馨小窝', '北欧风格', '两居室', 85, 9, '刘设计师', '["https://img0.baidu.com/it/u=2149603857,3178675074&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=1067","https://img2.baidu.com/it/u=1992793685,467888531&fm=253&fmt=auto&app=138&f=JPEG?w=1067&h=800"]', '["/cases/case2_1.jpg","/cases/case2_2.jpg","/cases/case2_3.jpg"]', '运用北欧风格的设计理念，以白色和浅木色为主调，营造清新自然的生活空间。大量使用天然材质，注重采光和通风。', '橡木地板、白色乳胶漆、棉麻布艺、北欧家具、绿植装饰', 980, 145, 31, 'APPROVED', '2023-07-20 14:30:00', '2024-07-20 14:30:00'),
+('轻奢风格大平层', '轻奢风格', '四居室', 180, 9, '刘设计师', '["https://img0.baidu.com/it/u=3397007468,3417172932&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=750","https://img1.baidu.com/it/u=308532982,3259728900&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=800"]', '["/cases/case3_1.jpg","/cases/case3_2.jpg","/cases/case3_3.jpg"]', '融合轻奢设计元素，采用高级灰色调和金属装饰，打造优雅奢华的居住环境。注重细节处理，体现品质和格调。', '大理石地板、金属装饰线、定制家具、水晶吊灯、高端布艺', 1580, 234, 45, 'APPROVED', '2023-08-10 09:15:00', '2024-08-10 09:15:00'),
+('工业风LOFT改造', '工业风', '复式', 150, 10, '王设计师', '["https://img1.baidu.com/it/u=389902269,1096287280&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=653","https://img0.baidu.com/it/u=1590071346,821150751&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=751"]', '["/cases/case4_1.jpg","/cases/case4_2.jpg","/cases/case4_3.jpg"]', '保留原始建筑结构，运用工业风设计元素，打造时尚前卫的居住空间。大量使用金属、混凝土等材质，展现原始粗犷的美感。', '水泥地面、金属管道、砖墙、工业风家具、轨道射灯', 1100, 167, 28, 'APPROVED', '2023-09-05 16:45:00', '2024-09-05 16:45:00'),
+('新中式别墅设计', '新中式', '别墅', 280, 11, '张设计师', '["https://img0.baidu.com/it/u=2311262177,2581687103&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=664","https://img2.baidu.com/it/u=2694121278,957578209&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=1067"]', '["/cases/case5_1.jpg","/cases/case5_2.jpg","/cases/case5_3.jpg"]', '将传统中式元素与现代设计理念完美融合，打造既有文化底蕴又符合现代生活的居住空间。注重空间层次和意境营造。', '红木家具、中式屏风、青砖地面、古典灯具、传统字画', 2100, 298, 56, 'APPROVED', '2023-10-12 11:30:00', '2024-10-12 11:30:00'),
+('地中海风格度假屋', '地中海风格', '三居室', 130, 11, '张设计师', '["https://img0.baidu.com/it/u=2311262177,2581687103&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=664","https://img2.baidu.com/it/u=2694121278,957578209&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=1067"]', '["/cases/case6_1.jpg","/cases/case6_2.jpg","/cases/case6_3.jpg"]', '运用地中海风格的蓝白色调，营造清新浪漫的海滨度假氛围。大量使用天然石材和木质元素，打造舒适宜人的居住环境。', '蓝色外墙、白色室内、陶土砖、藤编家具、海洋装饰', 1350, 178, 32, 'APPROVED', '2023-11-08 14:20:00', '2024-11-08 14:20:00');
 
 -- 插入文章数据
 INSERT INTO article (title, category, author_id, author_name, author_avatar, author_title, author_bio, cover_image, summary, content, tags, views, likes, status, publish_time, create_time, update_time) VALUES
@@ -401,11 +401,11 @@ INSERT INTO comment (target_type, target_id, user_id, username, avatar, content,
 
 -- 插入预约数据
 INSERT INTO appointment (user_id, user_name, designer_id, designer_name, appointment_time, floor_plan, description, contact, budget, status, create_time, update_time) VALUES
-(3, 'zhangsan', 1, '陈设计师', '2024-02-01 14:00:00', '/plans/plan1.jpg', '三居室装修，希望采用现代简约风格，注重储物空间的设计。', '13800138001', '10-15万', 'ACCEPTED', '2024-01-20 10:30:00', '2024-01-21 09:00:00'),
-(4, 'lisi', 2, '刘设计师', '2024-02-03 10:00:00', '/plans/plan2.jpg', '两居室装修，喜欢北欧风格，希望空间看起来更宽敞。', '13800138002', '8-12万', 'PENDING', '2024-01-21 15:20:00', '2024-01-21 15:20:00'),
-(5, 'wangwu', 3, '王设计师', '2024-02-05 16:00:00', '/plans/plan3.jpg', '复式楼装修，想尝试工业风格，保留原有的建筑结构。', '13800138003', '15-20万', 'COMPLETED', '2024-01-22 11:45:00', '2024-02-05 17:00:00'),
-(6, 'zhaoliu', 4, '张设计师', '2024-02-08 13:30:00', '/plans/plan4.jpg', '别墅装修，希望采用新中式风格，要有书房和茶室。', '13800138004', '25-30万', 'ACCEPTED', '2024-01-23 14:30:00', '2024-01-24 10:15:00'),
-(7, 'qianqi', 1, '陈设计师', '2024-02-10 09:30:00', '/plans/plan5.jpg', '小户型改造，需要在有限空间内实现多功能区域。', '13800138005', '6-8万', 'PENDING', '2024-01-24 16:20:00', '2024-01-24 16:20:00');
+(3, 'zhangsan', 8, '陈设计师', '2024-02-01 14:00:00', '/plans/plan1.jpg', '三居室装修，希望采用现代简约风格，注重储物空间的设计。', '13800138001', '10-15万', 'ACCEPTED', '2024-01-20 10:30:00', '2024-01-21 09:00:00'),
+(4, 'lisi', 9, '刘设计师', '2024-02-03 10:00:00', '/plans/plan2.jpg', '两居室装修，喜欢北欧风格，希望空间看起来更宽敞。', '13800138002', '8-12万', 'PENDING', '2024-01-21 15:20:00', '2024-01-21 15:20:00'),
+(5, 'wangwu', 10, '王设计师', '2024-02-05 16:00:00', '/plans/plan3.jpg', '复式楼装修，想尝试工业风格，保留原有的建筑结构。', '13800138003', '15-20万', 'COMPLETED', '2024-01-22 11:45:00', '2024-02-05 17:00:00'),
+(6, 'zhaoliu', 11, '张设计师', '2024-02-08 13:30:00', '/plans/plan4.jpg', '别墅装修，希望采用新中式风格，要有书房和茶室。', '13800138004', '25-30万', 'ACCEPTED', '2024-01-23 14:30:00', '2024-01-24 10:15:00'),
+(7, 'qianqi', 8, '陈设计师', '2024-02-10 09:30:00', '/plans/plan5.jpg', '小户型改造，需要在有限空间内实现多功能区域。', '13800138005', '6-8万', 'PENDING', '2024-01-24 16:20:00', '2024-01-24 16:20:00');
 
 -- 插入收藏数据
 INSERT INTO favorite (user_id, target_type, target_id, create_time) VALUES
