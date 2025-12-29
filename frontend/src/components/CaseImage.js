@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 
-const CaseImage = ({ coverImage }) => {
+const CaseImage = ({ coverImage, style = { width: '100%', height: '200px' } }) => {
   const [imageError, setImageError] = useState(false);
 
   if (!coverImage) {
-    return <div style={{ width: 60, height: 40, background: '#f0f0f0', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px', color: '#999' }}>暂无图片</div>;
+    return <div style={{ width: '100%', height: '200px', background: '#f0f0f0', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px', color: '#999' }}>暂无图片</div>;
   }
   
   // 如果是JSON字符串，解析取第一张图片
@@ -25,22 +25,21 @@ const CaseImage = ({ coverImage }) => {
   };
   
   if (imageError) {
-    return <div style={{ width: 60, height: 40, background: '#f0f0f0', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px', color: '#999' }}>加载失败</div>;
+    return <div style={{ width: '100%', height: '200px', background: '#f0f0f0', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px', color: '#999' }}>加载失败</div>;
   }
   
   return (
-    <div style={{ width: 60, height: 40, overflow: 'hidden' }}>
       <img 
         src={imageUrl} 
         alt="案例图片"
         style={{ 
           width: '100%', 
-          height: '100%', 
-          objectFit: 'cover' 
+          height: '200px', 
+          objectFit: 'cover',
+          ...style
         }}
         onError={handleImageError}
       />
-    </div>
   );
 };
 

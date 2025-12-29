@@ -201,17 +201,17 @@ const CaseDetail = () => {
   }
   
   // 处理其他图片
-  if (caseData.images) {
-    try {
-      const imagesData = typeof caseData.images === 'string' ? JSON.parse(caseData.images) : caseData.images;
-      if (Array.isArray(imagesData) && imagesData.length > 0) {
-        allImages = allImages.concat(imagesData);
-        console.log('其他图片解析成功:', imagesData);
-      }
-    } catch (e) {
-      console.log('其他图片解析失败:', e);
-    }
-  }
+  // if (caseData.images) {
+  //   try {
+  //     const imagesData = typeof caseData.images === 'string' ? JSON.parse(caseData.images) : caseData.images;
+  //     if (Array.isArray(imagesData) && imagesData.length > 0) {
+  //       allImages = allImages.concat(imagesData);
+  //       console.log('其他图片解析成功:', imagesData);
+  //     }
+  //   } catch (e) {
+  //     console.log('其他图片解析失败:', e);
+  //   }
+  // }
   
   // 去重
   allImages = [...new Set(allImages)];

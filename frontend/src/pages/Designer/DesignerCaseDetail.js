@@ -50,22 +50,39 @@ const DesignerCaseDetail = () => {
   }
 
   // 解析images字段（可能是JSON字符串）
-  const images = caseData.images ? 
-    (typeof caseData.images === 'string' ? JSON.parse(caseData.images) : caseData.images) : [];
-  
+  // const images = caseData.images ? 
+  //   (typeof caseData.images === 'string' ? JSON.parse(caseData.images) : caseData.images) : [];
+
+
   // 解析coverImage字段，支持JSON数组和单个URL
+  let allImages = [];
   let coverImageUrl = null;
   if (caseData.coverImage) {
     try {
       const parsed = JSON.parse(caseData.coverImage);
       if (Array.isArray(parsed) && parsed.length > 0) {
+        allImages = allImages.concat(parsed);
         coverImageUrl = parsed[0]; // 取第一张作为封面
       }
     } catch (e) {
       // 如果解析失败，直接使用原字符串
+      allImages = [caseData.coverImage];
       coverImageUrl = caseData.coverImage;
     }
   }
+  // 处理其他图片
+  // if (caseData.images) {
+  //   try {
+  //     const imagesData = typeof caseData.images === 'string' ? JSON.parse(caseData.images) : caseData.images;
+  //     if (Array.isArray(imagesData) && imagesData.length > 0) {
+  //       allImages = allImages.concat(imagesData);
+  //     }
+  //   } catch (e) {
+  //     console.log('其他图片解析失败:', e);
+  //   }
+  // }
+  //去重
+  allImages =[...new Set(allImages)]
 
   return (
     <div style={{ padding: '24px' }}>
@@ -103,10 +120,10 @@ const DesignerCaseDetail = () => {
           />
         )}
 
-        {images.length > 0 && (
+        {allImages.length > 0 && (
           <Row gutter={[16, 16]} style={{ marginBottom: '24px' }}>
-            {images.map((image, index) => (
-              <Col xs={24} sm={8} key={index}>
+            {allImages.map((image, index) => (
+              <Col xs={24} sm={8} key={`image-${index}`}>
                 <div style={{ width: '100%', height: '200px' }}>
                   <CaseImage coverImage={image} />
                 </div>
@@ -203,7 +220,7 @@ const DesignerCaseDetail = () => {
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <span>{comment.username}</span>
                     <span style={{ fontSize: '12px', color: '#999' }}>
-                      {new Date(comment.create_time).toLocaleString()}
+                      {new Date(comment.createTime).toLocaleString()}
                     </span>
                   </div>
                 }

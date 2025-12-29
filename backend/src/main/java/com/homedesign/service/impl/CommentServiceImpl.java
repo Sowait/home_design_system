@@ -226,21 +226,21 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         }
         
         // 根据用户ID查找对应的设计师记录 - 先获取设计师信息，再获取案例
-        QueryWrapper<Case> designerQueryWrapper = new QueryWrapper<>();
-        designerQueryWrapper.eq("designer_id", userId)
-                       .select("id", "title")
-                       .last("LIMIT 1");
-        Case designerCase = caseService.getOne(designerQueryWrapper);
+        // QueryWrapper<Case> designerQueryWrapper = new QueryWrapper<>();
+        // designerQueryWrapper.eq("designer_id", userId)
+        //                .select("id", "title")
+        //                .last("LIMIT 1");
+        // Case designerCase = caseService.getOne(designerQueryWrapper);
         
-        if (designerCase == null) {
-            // 如果该用户不是设计师，返回空结果
-            Page<CommentDTO> emptyPage = new Page<>(page, size);
-            emptyPage.setRecords(new ArrayList<>());
-            emptyPage.setTotal(0);
-            return emptyPage;
-        }
+        // if (designerCase == null) {
+        //     // 如果该用户不是设计师，返回空结果
+        //     Page<CommentDTO> emptyPage = new Page<>(page, size);
+        //     emptyPage.setRecords(new ArrayList<>());
+        //     emptyPage.setTotal(0);
+        //     return emptyPage;
+        // }
         
-        Long actualDesignerId = designerCase.getDesignerId();
+        Long actualDesignerId = userId;
         
         // 查询该设计师的所有案例
         QueryWrapper<Case> caseQueryWrapper = new QueryWrapper<>();

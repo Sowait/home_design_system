@@ -61,7 +61,7 @@ const CommentManagement = () => {
       render: (_, record) => (
         <Space>
           <Avatar size="small" src={record.userAvatar} icon={<MessageOutlined />} />
-          <span>{record.userName}</span>
+          <span>{record.username}</span>
         </Space>
       )
     },
@@ -79,21 +79,6 @@ const CommentManagement = () => {
       key: 'content',
       ellipsis: true,
       width: 250
-    },
-    {
-      title: '评分',
-      dataIndex: 'rating',
-      key: 'rating',
-      render: (rating) => <Rate disabled defaultValue={rating} />
-    },
-    {
-      title: '回复状态',
-      key: 'replyStatus',
-      render: (_, record) => (
-        <Tag color={record.replyContent ? 'green' : 'orange'}>
-          {record.replyContent ? '已回复' : '待回复'}
-        </Tag>
-      )
     },
     {
       title: '评论时间',
